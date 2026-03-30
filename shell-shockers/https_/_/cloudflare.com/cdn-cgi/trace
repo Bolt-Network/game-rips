@@ -1,0 +1,16 @@
+fl=626f65
+h=cloudflare.com
+ip=73.86.144.38
+ts=1774747826.004
+visit_scheme=https
+uag=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+colo=IAD
+sliver=010-tier1
+http=http/2
+loc=US
+tls=TLSv1.3
+sni=plaintext
+warp=off
+gateway=off
+rbi=off
+kex=X25519MLKEM768

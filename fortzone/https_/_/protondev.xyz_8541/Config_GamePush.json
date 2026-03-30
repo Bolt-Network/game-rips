@@ -1,0 +1,41 @@
+{
+  "ServerAddress1" : "https://protondev.xyz:8511/",
+  "ServerAddress2" : "https://protondev.xyz:8521/",
+  "ServerAddress3" : "https://protondev.xyz:8531/",
+  "ServerAddress4" : "https://protondev.xyz:8543/",
+  "MinVersion" : "0.8.8",
+  "ShopLink" : "https://playhop.com/app/398438",
+  "StartupMessage": "startup_maintenance",
+  "StartupAvailable": true,
+  "APKValidation": false,
+  "URLValidation": false,
+  "BannedURLs": "https://fortzone.org",
+  "CatalogCacheEnabled": true,
+  "BadWordsRemoteEnabled ":false,
+  "BadWordsRemoteAddress": "",
+  
+      "AddressDeletionRequest": "https://fullhpltd.com/deleting-a-game-account/",
+  "IsComplexDeletionRequest": false,
+  
+  "AdsServicesWorld": "admob,yandex",
+  
+  "AdsServices": "admob",
+  "AdsServicesRU": "yandex",
+
+  "AdsServices2": "admob",
+  "AdsServices2RU": "yandex",
+
+  "AdsServices3": "admob",
+  "AdsServices3RU": "none",
+  
+  
+  "TermsOfServiceAddress" : "https://fullhpltd.com/terms-of-service/",
+  "PrivacyPolicyAddress" : "https://fullhpltd.com/this-privacy-policy/",
+  
+  "ServerSession":{
+    "Enable" : true,
+	"Address" : "ws://protondev.xyz:8710/",
+	"StatusEnable": false,
+	"CheckPauseEnable" : false
+  }
+}
