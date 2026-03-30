@@ -32,11 +32,10 @@ def split_file(filename, chunk_size_mb=15):
     return parts_count
 
 # Your specific filenames
-base_dir = "99-nights/Build/"
-wasm_file = os.path.join(base_dir, "287e54c54d31f22e0512fb5822936c51.wasm.br")
-data_file = os.path.join(base_dir, "da4ce0d553e82f86fba06d5fd7e11abd.data.br")
+base_dir = "fishit/https_\_\pub-2d868f15a1824cc8a2ec51069ed41c6f.r2.dev"
+wasm_file = os.path.join(base_dir, "fish_it_44cc2589b32d6efc0a45a3b388d705ba.wasm.br")
+
 
 print("Starting split...")
 wasm_parts = split_file(wasm_file)
-data_parts = split_file(data_file)
-print(f"\nDone! WASM parts: {wasm_parts}, DATA parts: {data_parts}")
+print(f"\nDone! WASM parts: {wasm_parts}")
