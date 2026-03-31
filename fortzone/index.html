@@ -8,12 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Fort Battle Royale</title>
   <script>
-	if (window.self === window.top) {
-	    var gLoc = window.location.pathname;
-	    var gPath = gLoc.substring(0, gLoc.lastIndexOf('/'));
-	    var gName = gPath.substring(gPath.lastIndexOf("/") + 1);
-	    //window.location.replace('../../../../' + gName + '-game/');
-	}
+    if (window.self === window.top) {
+      var gLoc = window.location.pathname;
+      var gPath = gLoc.substring(0, gLoc.lastIndexOf('/'));
+      var gName = gPath.substring(gPath.lastIndexOf("/") + 1);
+      //window.location.replace('../../../../' + gName + '-game/');
+    }
   </script>
   <link rel="stylesheet" href="TemplateData/style.css">
 
@@ -43,8 +43,15 @@
   <script>
     const buildUrl = "Build";
     const loaderUrl = buildUrl + "/FortzoneWebGL109.loader.js";
+
+    // 1. Define the parts (Update these URLs to your jsDelivr links)
+    const dataParts = [
+      buildUrl + "/FortzoneWebGL109.data.unityweb.part1",
+      buildUrl + "/FortzoneWebGL109.data.unityweb.part2"
+    ];
+
     const config = {
-      dataUrl: buildUrl + "/FortzoneWebGL109.data.unityweb",
+      dataUrl: "", // We will fill this dynamically
       frameworkUrl: buildUrl + "/FortzoneWebGL109.framework.js.unityweb",
       codeUrl: buildUrl + "/FortzoneWebGL109.wasm.unityweb",
       streamingAssetsUrl: "StreamingAssets",
@@ -53,59 +60,53 @@
       productVersion: "0.8.8",
     };
 
+    // 2. Function to fetch and combine parts
+    async function downloadAndCombine(parts) {
+      const buffers = await Promise.all(parts.map(part =>
+        fetch(part).then(res => {
+          if (!res.ok) throw new Error(`Failed to load ${part}`);
+          return res.arrayBuffer();
+        })
+      ));
+      const blob = new Blob(buffers, { type: "application/octet-stream" });
+      return URL.createObjectURL(blob);
+    }
+
     const container = document.querySelector("#unity-container");
     const canvas = document.querySelector("#unity-canvas");
     const loadingCover = document.querySelector("#loading-cover");
-    const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
     const progressBarFull = document.querySelector("#unity-progress-bar-full");
     const spinner = document.querySelector('.spinner');
-
-    if (overlayBackgroundColor !== "-" && overlayBackgroundColor !== " " && overlayBackgroundColor !== "")
-      canvas.style.background = overlayBackgroundColor;
-
-    if (progressBarFillColor !== "-" && progressBarFillColor !== " " && progressBarFillColor !== "")
-      progressBarFull.style.background = progressBarFillColor;
-
-    if (progressBarBackgroundColor !== "-" && progressBarBackgroundColor !== " " && progressBarBackgroundColor !== "")
-      progressBarEmpty.style.background = progressBarBackgroundColor;
-
-    if (progressBarBorderColor !== "-" && progressBarBorderColor !== " " && progressBarBorderColor !== "")
-      progressBarEmpty.style.border.color = progressBarBorderColor;
-
-
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      container.className = "unity-mobile";
-    }
 
     loadingCover.style.display = "";
 
     const unityLoader = document.createElement("script");
     unityLoader.src = loaderUrl;
+
     unityLoader.onload = async () => {
-      //await _gpAwaiter.ready;
-      createUnityInstance(canvas, config, (progress) => {
-        spinner.style.display = "none";
-        progressBarEmpty.style.display = "";
-        progressBarFull.style.width = `${100 * progress}%`;
-      }).then((unityInstance) => {
-        window.unityInstance = unityInstance;
-        //_unityAwaiter.done(unityInstance);
-        loadingCover.style.display = "none";
-      }).catch((message) => {
-        //_unityAwaiter.abort(message);
-        alert(message);
-      });
+      try {
+        // 3. Wait for parts to fuse before starting Unity
+        console.log("Fusing data parts...");
+        config.dataUrl = await downloadAndCombine(dataParts);
+
+        createUnityInstance(canvas, config, (progress) => {
+          spinner.style.display = "none";
+          document.querySelector("#unity-progress-bar-empty").style.display = "";
+          progressBarFull.style.width = `${100 * progress}%`;
+        }).then((unityInstance) => {
+          window.unityInstance = unityInstance;
+          loadingCover.style.display = "none";
+        });
+      } catch (err) {
+        alert("Error loading game data: " + err);
+      }
     };
     document.body.appendChild(unityLoader);
-
-    document.addEventListener("pointerdown", () => {
-      container.focus();
-      window.focus();
-      canvas.focus();
-    });
-
   </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"c843b8c381814d58b40d4597a1bf7962","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+    integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+    data-cf-beacon='{"version":"2024.11.0","token":"c843b8c381814d58b40d4597a1bf7962","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}'
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
